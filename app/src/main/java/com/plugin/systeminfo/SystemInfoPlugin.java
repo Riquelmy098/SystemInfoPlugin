@@ -23,6 +23,7 @@ public class SystemInfoPlugin extends GodotPlugin {
         return "SystemInfoPlugin";
     }
 
+    // Este não precisa mudar, pois a bateria vai de 0 a 100 (cabe no int)
     @UsedByGodot
     public int getBatteryPercentage() {
         IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
@@ -35,35 +36,37 @@ public class SystemInfoPlugin extends GodotPlugin {
         return -1;
     }
 
+    // --- MÉTODOS ABAIXO ALTERADOS DE long PARA String ---
+
     @UsedByGodot
-    public long getTotalRam() {
+    public String getTotalRam() {
         ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
         ActivityManager.MemoryInfo info = new ActivityManager.MemoryInfo();
         manager.getMemoryInfo(info);
-        return info.totalMem;
+        return String.valueOf(info.totalMem);
     }
 
     @UsedByGodot
-    public long getUsedRam() {
+    public String getUsedRam() {
         ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
         ActivityManager.MemoryInfo info = new ActivityManager.MemoryInfo();
         manager.getMemoryInfo(info);
-        return info.totalMem - info.availMem;
+        return String.valueOf(info.totalMem - info.availMem);
     }
 
     @UsedByGodot
-    public long getTotalStorage() {
+    public String getTotalStorage() {
         File path = Environment.getDataDirectory();
         StatFs stat = new StatFs(path.getPath());
-        return stat.getTotalBytes();
+        return String.valueOf(stat.getTotalBytes());
     }
 
     @UsedByGodot
-    public long getUsedStorage() {
+    public String getUsedStorage() {
         File path = Environment.getDataDirectory();
         StatFs stat = new StatFs(path.getPath());
         long free = stat.getAvailableBytes();
         long total = stat.getTotalBytes();
-        return total - free;
+        return String.valueOf(total - free);
     }
 }
